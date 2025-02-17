@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pratique Inglês - Gerador de Perguntas</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            margin-top: 30px;
+        }
+
+        .level-buttons {
+            margin: 20px 0;
+        }
+
+        button {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: #fff;
+            box-shadow: 2px 2px 5px #000;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-5px);
+        }
+
+        .beginner { background-color: #2196f3; }
+        .intermediate { background-color: #ff9800; }
+        .advanced { background-color: #e91e63; }
+
+        #question {
+            margin-top: 30px;
+            font-size: 24px;
+            min-height: 60px;
+        }
+
+        #answer-section {
+            margin-top: 20px;
+        }
+
+        #user-answer {
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            width: 60%;
+            box-shadow: 2px 2px 5px #000;
+        }
+
+        #submit-answer {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: #fff;
+            box-shadow: 2px 2px 5px #000;
+            transition: transform 0.2s;
+        }
+
+        #submit-answer:hover {
+            transform: translateY(-3px);
+        }
+
+        #feedback {
+            margin-top: 20px;
+            color: #ffd700;
+            min-height: 30px;
+            font-size: 20px;
+        }
+
+        #score {
+            margin-top: 30px;
+            font-size: 22px;
+            color: #00ff7f;
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 14px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Pratique Inglês - Gerador de Perguntas</h1>
+
+    <div class="level-buttons">
+        <button class="beginner" onclick="generateQuestion('beginner')">Iniciante</button>
+        <button class="intermediate" onclick="generateQuestion('intermediate')">Intermediário</button>
+        <button class="advanced" onclick="generateQuestion('advanced')">Avançado</button>
+    </div>
+
+    <div id="question">Escolha um nível para gerar uma pergunta.</div>
+
+    <div id="answer-section" style="display:none;">
+        <input type="text" id="user-answer" placeholder="Digite sua resposta aqui...">
+        <br>
+        <button id="submit-answer" onclick="submitAnswer()">Enviar Resposta</button>
+    </div>
+
+    <div id="feedback"></div>
+    <div id="score">Pontuação: 0</div>
+
+    <footer>
+        &copy; 2025 - Sistema de Prática de Inglês
+    </footer>
+
+    <script>
+        const questions = {
+            beginner: [
+                "What is your name?",
+                "Where are you from?",
+                "How old are you?",
+                "What is your favorite color?",
+                "Do you like pizza?"
+            ],
+            intermediate: [
+                "What do you like to do in your free time?",
+                "Describe your daily routine.",
+                "What did you do last weekend?",
+                "What are your future goals?",
+                "What's your opinion about learning new languages?"
+            ],
+            advanced: [
+                "What are the advantages of learning English?",
+                "How do you see the future of technology?",
+                "Discuss the importance of cultural diversity.",
+                "What would you do if you could travel back in time?",
+                "What role does education play in society?"
+            ]
+        };
+
+        let currentLevel = '';
+        let score = 0;
+
+        function generateQuestion(level) {
+            currentLevel = level;
+            const levelQuestions = questions[level];
+            const randomIndex = Math.floor(Math.random() * levelQuestions.length);
+            const question = levelQuestions[randomIndex];
+            document.getElementById('question').innerText = question;
+            document.getElementById('answer-section').style.display = 'block';
+            document.getElementById('feedback').innerText = '';
+            document.getElementById('user-answer').value = '';
+        }
+
+        function submitAnswer() {
+            const userAnswer = document.getElementById('user-answer').value.trim();
+            if (userAnswer) {
+                score++;
+                document.getElementById('feedback').innerText = "Resposta registrada! Continue praticando.";
+                document.getElementById('score').innerText = `Pontuação: ${score}`;
+                generateQuestion(currentLevel);
+            } else {
+                document.getElementById('feedback').innerText = "Por favor, digite uma resposta!";
+            }
+        }
+    </script>
+
+</body>
+</html>
