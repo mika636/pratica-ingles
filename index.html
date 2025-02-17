@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pratique Inglês - Quiz Interativo</title>
+    <title>Pratique Inglês - Gerador de Perguntas</title>
     <style>
         body {
             background-color: #121212;
@@ -13,8 +13,16 @@
             margin: 0;
             padding: 0;
         }
-        h1 { margin-top: 30px; }
-        .level-buttons button {
+
+        h1 {
+            margin-top: 30px;
+        }
+
+        .level-buttons {
+            margin: 20px 0;
+        }
+
+        button {
             margin: 10px;
             padding: 15px 30px;
             font-size: 18px;
@@ -25,129 +33,163 @@
             box-shadow: 2px 2px 5px #000;
             transition: transform 0.2s;
         }
-        .level-buttons button:hover { transform: translateY(-5px); }
+
+        button:hover {
+            transform: translateY(-5px);
+        }
+
         .beginner { background-color: #2196f3; }
         .intermediate { background-color: #ff9800; }
         .advanced { background-color: #e91e63; }
-        #question { margin-top: 30px; font-size: 24px; min-height: 60px; }
-        #answers button {
+
+        #question {
+            margin-top: 30px;
+            font-size: 24px;
+            min-height: 60px;
+        }
+
+        #answer-section {
+            margin-top: 20px;
+        }
+
+        .option-btn {
             display: block;
             margin: 10px auto;
-            padding: 15px 30px;
-            font-size: 18px;
-            border: none;
+            padding: 10px 20px;
             border-radius: 5px;
+            border: none;
+            font-size: 18px;
+            color: #fff;
+            background-color: #4caf50;
+            box-shadow: 2px 2px 5px #000;
+            transition: transform 0.2s;
             cursor: pointer;
-            color: #000;
-            background-color: #f0f0f0;
-            width: 60%;
-            transition: background-color 0.3s;
         }
-        #answers button:hover { background-color: #b0b0b0; }
-        #feedback { margin-top: 20px; min-height: 30px; font-size: 20px; color: #ffd700; }
-        #score { margin-top: 30px; font-size: 22px; color: #00ff7f; }
-        footer { margin-top: 50px; font-size: 14px; color: #aaa; }
+
+        .option-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        #feedback {
+            margin-top: 20px;
+            color: #ffd700;
+            min-height: 30px;
+            font-size: 20px;
+        }
+
+        #score {
+            margin-top: 30px;
+            font-size: 22px;
+            color: #00ff7f;
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 14px;
+            color: #aaa;
+        }
     </style>
 </head>
 <body>
-    <h1>Pratique Inglês - Quiz Interativo</h1>
+
+    <h1>Pratique Inglês - Gerador de Perguntas</h1>
+
     <div class="level-buttons">
         <button class="beginner" onclick="startQuiz('beginner')">Iniciante</button>
         <button class="intermediate" onclick="startQuiz('intermediate')">Intermediário</button>
         <button class="advanced" onclick="startQuiz('advanced')">Avançado</button>
     </div>
-    <div id="question">Escolha um nível para iniciar o quiz.</div>
-    <div id="answers"></div>
+
+    <div id="question">Escolha um nível para gerar uma pergunta.</div>
+
+    <div id="answer-section" style="display:none;"></div>
+
     <div id="feedback"></div>
     <div id="score">Pontuação: 0</div>
-    <footer>&copy; 2025 - Sistema de Prática de Inglês</footer>
+
+    <footer>
+        &copy; 2025 - Sistema de Prática de Inglês
+    </footer>
+
     <script>
         const questions = {
-            beginner: Array.from({length: 50}, (_, i) => ({
+            beginner: Array.from({ length: 50 }, (_, i) => ({
                 question: `Beginner question ${i + 1}?`,
-                options: ['a) Apple', 'b) Banana', 'c) Orange', 'd) Grape', 'e) Mango'],
+                options: ['a', 'b', 'c', 'd', 'e'],
                 answer: 'a'
             })),
-            intermediate: Array.from({length: 50}, (_, i) => ({
+            intermediate: Array.from({ length: 50 }, (_, i) => ({
                 question: `Intermediate question ${i + 1}?`,
-                options: ['a) House', 'b) Car', 'c) Tree', 'd) Road', 'e) Bridge'],
+                options: ['a', 'b', 'c', 'd', 'e'],
                 answer: 'b'
             })),
-            advanced: Array.from({length: 50}, (_, i) => ({
+            advanced: Array.from({ length: 50 }, (_, i) => ({
                 question: `Advanced question ${i + 1}?`,
-                options: ['a) Complex', 'b) Simple', 'c) Abstract', 'd) Concrete', 'e) Dynamic'],
+                options: ['a', 'b', 'c', 'd', 'e'],
                 answer: 'c'
             }))
         };
 
         let currentLevel = '';
-        let currentQuestions = [];
-        let answeredCount = 0;
-        let correctCount = 0;
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
 
         function startQuiz(level) {
             currentLevel = level;
-            answeredCount = 0;
-            correctCount = 0;
-            currentQuestions = shuffleArray([...questions[level]]);
-            showNextQuestion();
+            currentQuestionIndex = 0;
+            correctAnswers = 0;
+            nextQuestion();
         }
 
-        function showNextQuestion() {
-            if (answeredCount === 10) {
-                showScore();
-                return;
+        function nextQuestion() {
+            const levelQuestions = questions[currentLevel];
+            if (currentQuestionIndex < levelQuestions.length) {
+                const q = levelQuestions[currentQuestionIndex];
+                document.getElementById('question').innerText = q.question;
+                const answerSection = document.getElementById('answer-section');
+                answerSection.innerHTML = '';
+                q.options.forEach((option, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerText = `${String.fromCharCode(97 + index)}) ${option}`;
+                    btn.onclick = () => checkAnswer(option);
+                    answerSection.appendChild(btn);
+                });
+                answerSection.style.display = 'block';
+            } else {
+                const scorePercentage = (correctAnswers / 50) * 100;
+                const grade = getGrade(scorePercentage);
+                document.getElementById('question').innerText = `Fim do nível ${currentLevel}. Nota: ${grade}`;
+                document.getElementById('answer-section').style.display = 'none';
             }
-            const q = currentQuestions[answeredCount];
-            document.getElementById('question').innerText = q.question;
-            const answersDiv = document.getElementById('answers');
-            answersDiv.innerHTML = '';
-            q.options.forEach((option, index) => {
-                const button = document.createElement('button');
-                button.innerText = option;
-                button.onclick = () => checkAnswer(option[0]);
-                answersDiv.appendChild(button);
-            });
-            document.getElementById('feedback').innerText = '';
         }
 
         function checkAnswer(selected) {
-            const correct = currentQuestions[answeredCount].answer;
-            if (selected === correct) {
-                correctCount++;
-                document.getElementById('feedback').innerText = 'Correto!';
+            const currentQ = questions[currentLevel][currentQuestionIndex];
+            if (selected === currentQ.answer) {
+                correctAnswers++;
+                document.getElementById('feedback').innerText = '✅ Acertou! 😊';
             } else {
-                document.getElementById('feedback').innerText = `Errado! Resposta correta: ${correct}`;
+                document.getElementById('feedback').innerText = '❌ Errou! 😢';
             }
-            answeredCount++;
-            setTimeout(showNextQuestion, 1000);
+            currentQuestionIndex++;
+            document.getElementById('score').innerText = `Pontuação: ${correctAnswers}/${currentQuestionIndex}`;
+            setTimeout(nextQuestion, 1000);
         }
 
-        function showScore() {
-            const score = correctCount;
-            let grade;
-            if (score === 10) grade = 'A+';
-            else if (score >= 9) grade = 'A';
-            else if (score >= 8) grade = 'A-';
-            else if (score >= 7) grade = 'B+';
-            else if (score >= 6) grade = 'B';
-            else if (score >= 5) grade = 'C';
-            else if (score >= 4) grade = 'D';
-            else grade = 'D-';
-
-            document.getElementById('question').innerText = `Você acertou ${score} de 10 perguntas. Nota: ${grade}`;
-            document.getElementById('answers').innerHTML = '';
-            document.getElementById('feedback').innerText = '';
-            document.getElementById('score').innerText = `Pontuação final: ${score}/10`;
-        }
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
+        function getGrade(score) {
+            if (score >= 90) return 'A+';
+            if (score >= 85) return 'A';
+            if (score >= 80) return 'A-';
+            if (score >= 75) return 'B+';
+            if (score >= 70) return 'B';
+            if (score >= 65) return 'B-';
+            if (score >= 60) return 'C+';
+            if (score >= 55) return 'C';
+            if (score >= 50) return 'C-';
+            return 'D';
         }
     </script>
+
 </body>
 </html>
