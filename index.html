@@ -61,39 +61,39 @@
             margin-top: 20px;
         }
 
-        .options button {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 20px;
+        .option-button {
+            margin: 10px;
+            padding: 12px 25px;
             font-size: 16px;
-            border: 1px solid #555;
-            border-radius: 5px;
+            background-color: #333;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .options button:hover {
-            background-color: #555;
-        }
-
-        .feedback {
-            margin-top: 20px;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .correct {
-            color: #4caf50;
-        }
-
-        .incorrect {
-            color: #f44336;
         }
 
         footer {
             margin-top: 50px;
             font-size: 14px;
             color: #aaa;
+        }
+
+        .correct {
+            background-color: #4caf50;
+        }
+
+        .incorrect {
+            background-color: #f44336;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        .congratulations {
+            color: #4caf50;
+            font-size: 24px;
+            margin-top: 30px;
         }
     </style>
 </head>
@@ -109,99 +109,198 @@
 
     <div id="question">Escolha um nível para gerar uma pergunta.</div>
 
-    <div class="options" id="options">
-        <!-- As opções serão geradas dinamicamente aqui -->
-    </div>
-
-    <div class="feedback" id="feedback"></div>
+    <div id="options" class="options"></div>
+    <div id="feedback" class="feedback"></div>
 
     <footer>
         &copy; 2025 - Sistema de Prática de Inglês
     </footer>
 
     <script>
-        // Perguntas por nível com alternativas
+        // Perguntas por nível (com alternativas)
         const questions = {
-            beginner: [
-                {
-                    question: "What is your name?",
-                    options: ["My name is John.", "I am 25 years old.", "I like pizza.", "I am from Brazil."],
-                    correctAnswer: 0 // A primeira opção é a correta
-                },
-                {
-                    question: "Where are you from?",
-                    options: ["I am from Brazil.", "I am 20 years old.", "I like coffee.", "My name is Anna."],
-                    correctAnswer: 0
-                },
-                {
-                    question: "How old are you?",
-                    options: ["I am 25 years old.", "I like cats.", "I am from Canada.", "My name is Peter."],
-                    correctAnswer: 0
-                },
-                // Adicione mais perguntas aqui...
-            ],
             intermediate: [
-                {
-                    question: "What do you like to do in your free time?",
-                    options: ["I like to read books.", "I am 30 years old.", "I am from Spain.", "My name is Maria."],
-                    correctAnswer: 0
-                },
-                {
-                    question: "Can you describe your daily routine?",
-                    options: ["I wake up at 7 AM.", "I like to travel.", "I am from Germany.", "My name is Hans."],
-                    correctAnswer: 0
-                },
-                // Adicione mais perguntas aqui...
+                { question: "I have been studying English ___ five years.", correct: "for", options: [
+                    "for",
+                    "since",
+                    "at",
+                    "in"
+                ]},
+                { question: "She has never ___ to Paris.", correct: "gone", options: [
+                    "been",
+                    "go",
+                    "gone",
+                    "was"
+                ]},
+                { question: "What did you ___ last weekend?", correct: "do", options: [
+                    "did",
+                    "do",
+                    "does",
+                    "doing"
+                ]},
+                { question: "I ___ to the cinema tomorrow.", correct: "will go", options: [
+                    "will go",
+                    "go",
+                    "goes",
+                    "going"
+                ]},
+                { question: "They ___ already left.", correct: "have", options: [
+                    "has",
+                    "have",
+                    "had",
+                    "are"
+                ]},
+                { question: "I ___ a great book right now.", correct: "am reading", options: [
+                    "read",
+                    "am reading",
+                    "reads",
+                    "reading"
+                ]},
+                { question: "He ___ speak three languages.", correct: "can", options: [
+                    "can",
+                    "could",
+                    "can to",
+                    "is can"
+                ]},
+                { question: "I haven’t seen her ___ last month.", correct: "since", options: [
+                    "for",
+                    "since",
+                    "during",
+                    "in"
+                ]},
+                { question: "We ___ here for two hours.", correct: "have been", options: [
+                    "have been",
+                    "are",
+                    "were",
+                    "been"
+                ]},
+                { question: "By the time we arrive, they ___ finished their dinner.", correct: "will have", options: [
+                    "will",
+                    "have",
+                    "had",
+                    "will have"
+                ]},
+                { question: "If I ___ you, I would not go there.", correct: "were", options: [
+                    "am",
+                    "was",
+                    "were",
+                    "be"
+                ]}
             ],
             advanced: [
-                {
-                    question: "What are the advantages of living in a big city?",
-                    options: ["More job opportunities.", "Less pollution.", "Quiet environment.", "Fewer people."],
-                    correctAnswer: 0
-                },
-                {
-                    question: "How do you think technology will change the world in the next 10 years?",
-                    options: ["Increased automation.", "Less connectivity.", "Decline in innovation.", "Reduced access to information."],
-                    correctAnswer: 0
-                },
-                // Adicione mais perguntas aqui...
+                { question: "By the time you arrive, I ___ for two hours.", correct: "will have been waiting", options: [
+                    "will have been waiting",
+                    "will be waiting",
+                    "am waiting",
+                    "was waiting"
+                ]},
+                { question: "If he ___ harder, he would have passed the exam.", correct: "had studied", options: [
+                    "study",
+                    "had studied",
+                    "studies",
+                    "studied"
+                ]},
+                { question: "It’s the best movie I ___ ever seen.", correct: "have", options: [
+                    "have",
+                    "had",
+                    "will have",
+                    "was"
+                ]},
+                { question: "He was very tired, ___ he continued working.", correct: "but", options: [
+                    "so",
+                    "but",
+                    "although",
+                    "because"
+                ]},
+                { question: "They ___ to the party, but they decided not to go.", correct: "were invited", options: [
+                    "were invited",
+                    "invited",
+                    "have invited",
+                    "had invited"
+                ]},
+                { question: "I wouldn’t have gone if I ___ known.", correct: "had", options: [
+                    "have",
+                    "would have",
+                    "had",
+                    "will"
+                ]},
+                { question: "She was the only one who ___ the right answer.", correct: "knew", options: [
+                    "knew",
+                    "know",
+                    "was knowing",
+                    "knows"
+                ]},
+                { question: "Had I known about the meeting, I ___ earlier.", correct: "would have come", options: [
+                    "would come",
+                    "would have come",
+                    "will come",
+                    "came"
+                ]},
+                { question: "He can’t find his keys, which is why he ___ be at home.", correct: "must", options: [
+                    "must",
+                    "should",
+                    "might",
+                    "could"
+                ]},
+                { question: "They ___ already left when I got to the station.", correct: "had", options: [
+                    "had",
+                    "have",
+                    "will",
+                    "are"
+                ]}
             ]
         };
 
-        // Função para gerar perguntas e alternativas
+        let totalQuestions = 0;
+        let correctAnswers = 0;
+
+        // Função para gerar uma pergunta aleatória
         function generateQuestion(level) {
             const levelQuestions = questions[level];
             const randomIndex = Math.floor(Math.random() * levelQuestions.length);
-            const selectedQuestion = levelQuestions[randomIndex];
+            const questionData = levelQuestions[randomIndex];
+            displayQuestion(questionData);
+            totalQuestions++;
+        }
 
-            // Exibe a pergunta
-            document.getElementById('question').innerText = selectedQuestion.question;
+        // Função para exibir a pergunta e alternativas
+        function displayQuestion(questionData) {
+            const questionElement = document.getElementById('question');
+            const optionsElement = document.getElementById('options');
+            const feedbackElement = document.getElementById('feedback');
 
-            // Gera as alternativas
-            const optionsContainer = document.getElementById('options');
-            optionsContainer.innerHTML = ""; // Limpa as opções anteriores
+            questionElement.innerText = questionData.question;
+            optionsElement.innerHTML = ''; // Limpa as opções anteriores
+            feedbackElement.innerHTML = ''; // Limpa o feedback anterior
 
-            selectedQuestion.options.forEach((option, index) => {
+            questionData.options.forEach(option => {
                 const button = document.createElement('button');
-                button.innerText = `${index + 1}. ${option}`;
-                button.onclick = () => checkAnswer(index, selectedQuestion.correctAnswer);
-                optionsContainer.appendChild(button);
+                button.className = 'option-button';
+                button.innerText = option;
+                button.onclick = () => {
+                    checkAnswer(option, questionData.correct, button);
+                    // Passa imediatamente para a próxima pergunta após a resposta
+                    setTimeout(() => generateQuestion('intermediate'), 1000);  // Ajuste para o nível correto
+                };
+                optionsElement.appendChild(button);
             });
-
-            // Limpa o feedback anterior
-            document.getElementById('feedback').innerText = "";
         }
 
         // Função para verificar a resposta
-        function checkAnswer(selectedIndex, correctIndex) {
-            const feedback = document.getElementById('feedback');
-            if (selectedIndex === correctIndex) {
-                feedback.innerText = "Resposta correta! 🎉";
-                feedback.className = "feedback correct";
+        function checkAnswer(selectedOption, correctAnswer, button) {
+            const feedbackElement = document.getElementById('feedback');
+            if (selectedOption === correctAnswer) {
+                button.classList.add('correct');
+                feedbackElement.innerHTML = "Resposta correta! 🎉";
+                correctAnswers++;
             } else {
-                feedback.innerText = "Resposta incorreta. Tente novamente! ❌";
-                feedback.className = "feedback incorrect";
+                button.classList.add('incorrect');
+                feedbackElement.innerHTML = "Resposta incorreta. ❌";
             }
+
+            // Desabilita os botões após a resposta ser selecionada
+            const buttons = document.querySelectorAll('.option-button');
+            buttons.forEach(btn => btn.disabled = true);
         }
     </script>
 
