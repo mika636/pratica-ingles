@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pratique Inglês - Gerador de Perguntas</title>
     <style>
+        /* Estilo básico com fundo escuro e botões destacados */
         body {
             background-color: #121212;
             color: #fff;
@@ -38,49 +39,22 @@
             transform: translateY(-5px);
         }
 
-        .beginner { background-color: #2196f3; }
-        .intermediate { background-color: #ff9800; }
-        .advanced { background-color: #e91e63; }
+        .beginner {
+            background-color: #2196f3;
+        }
+
+        .intermediate {
+            background-color: #ff9800;
+        }
+
+        .advanced {
+            background-color: #e91e63;
+        }
 
         #question {
-            margin-top: 30px;
+            margin-top: 40px;
             font-size: 24px;
             min-height: 60px;
-        }
-
-        #answer-section {
-            margin-top: 20px;
-        }
-
-        .option-btn {
-            display: block;
-            margin: 10px auto;
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: none;
-            font-size: 18px;
-            color: #fff;
-            background-color: #4caf50;
-            box-shadow: 2px 2px 5px #000;
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-
-        .option-btn:hover {
-            transform: translateY(-3px);
-        }
-
-        #feedback {
-            margin-top: 20px;
-            color: #ffd700;
-            min-height: 30px;
-            font-size: 20px;
-        }
-
-        #score {
-            margin-top: 30px;
-            font-size: 22px;
-            color: #00ff7f;
         }
 
         footer {
@@ -95,99 +69,67 @@
     <h1>Pratique Inglês - Gerador de Perguntas</h1>
 
     <div class="level-buttons">
-        <button class="beginner" onclick="startQuiz('beginner')">Iniciante</button>
-        <button class="intermediate" onclick="startQuiz('intermediate')">Intermediário</button>
-        <button class="advanced" onclick="startQuiz('advanced')">Avançado</button>
+        <button class="beginner" onclick="generateQuestion('beginner')">Iniciante</button>
+        <button class="intermediate" onclick="generateQuestion('intermediate')">Intermediário</button>
+        <button class="advanced" onclick="generateQuestion('advanced')">Avançado</button>
     </div>
 
     <div id="question">Escolha um nível para gerar uma pergunta.</div>
-
-    <div id="answer-section" style="display:none;"></div>
-
-    <div id="feedback"></div>
-    <div id="score">Pontuação: 0</div>
 
     <footer>
         &copy; 2025 - Sistema de Prática de Inglês
     </footer>
 
     <script>
+        // Perguntas por nível (30 perguntas por nível)
         const questions = {
-            beginner: Array.from({ length: 50 }, (_, i) => ({
-                question: `Beginner question ${i + 1}?`,
-                options: ['a', 'b', 'c', 'd', 'e'],
-                answer: 'a'
-            })),
-            intermediate: Array.from({ length: 50 }, (_, i) => ({
-                question: `Intermediate question ${i + 1}?`,
-                options: ['a', 'b', 'c', 'd', 'e'],
-                answer: 'b'
-            })),
-            advanced: Array.from({ length: 50 }, (_, i) => ({
-                question: `Advanced question ${i + 1}?`,
-                options: ['a', 'b', 'c', 'd', 'e'],
-                answer: 'c'
-            }))
+            beginner: [
+                "What is your name?", "Where are you from?", "How old are you?", "What is your favorite color?", "Do you like pizza?",
+                "Can you name five animals?", "What time do you wake up?", "What is your favorite hobby?", "Do you prefer cats or dogs?",
+                "What do you usually eat for breakfast?", "What is your favorite season?", "Do you have any siblings?", "What is your favorite fruit?",
+                "Can you play a musical instrument?", "What is your favorite sport?", "Do you like to read books?", "What is your favorite movie?",
+                "What is your dream job?", "Do you enjoy cooking?", "What is your favorite holiday?", "Do you like to travel?", "What is your favorite animal?",
+                "What is your favorite type of music?", "Do you have a pet?", "What is your favorite subject in school?", "Do you like to exercise?",
+                "What is your favorite dessert?", "Do you prefer coffee or tea?", "What is your favorite place to visit?", "Do you like to watch TV shows?"
+            ],
+            intermediate: [
+                "What do you like to do in your free time?", "Can you describe your daily routine?", "What did you do last weekend?", "How often do you travel?",
+                "What are your future goals?", "What was the last movie you watched? What did you think about it?", "Describe a memorable moment from your childhood.",
+                "What do you think about social media?", "If you could visit any country, where would you go and why?", "What's your opinion about learning new languages?",
+                "What are your favorite hobbies?", "How do you usually spend your weekends?", "What is your favorite type of food?", "Do you enjoy outdoor activities?",
+                "What is your favorite book and why?", "What is your favorite way to relax?", "Do you prefer working alone or in a team?", "What is your favorite holiday destination?",
+                "What is your favorite type of movie genre?", "Do you like to learn new skills?", "What is your favorite way to exercise?", "Do you enjoy listening to podcasts?",
+                "What is your favorite type of art?", "Do you like to take photographs?", "What is your favorite way to spend time with friends?", "Do you enjoy playing video games?",
+                "What is your favorite way to learn new things?", "Do you like to attend live events?", "What is your favorite way to stay organized?", "Do you enjoy trying new foods?"
+            ],
+            advanced: [
+                "What are the advantages and disadvantages of living in a big city?", "How do you think technology will change the world in the next 10 years?",
+                "Discuss the importance of environmental sustainability.", "What role does culture play in shaping our identity?", "How can we promote equality in society?",
+                "Discuss the impact of social media on human relationships.", "If you could invent something new, what would it be and why?", "How do you handle challenging situations?",
+                "What qualities make a good leader?", "How would you explain your country’s culture to a foreigner?", "What are the biggest challenges facing the world today?",
+                "How do you think education will evolve in the future?", "What is your opinion on artificial intelligence?", "How can we reduce our carbon footprint?",
+                "What are the benefits of a multicultural society?", "How do you think globalization affects local cultures?", "What is your opinion on remote work?",
+                "How can we improve mental health awareness?", "What are the pros and cons of renewable energy?", "How do you think the job market will change in the next decade?",
+                "What is your opinion on universal basic income?", "How can we encourage more people to vote?", "What is your opinion on the future of space exploration?",
+                "How do you think climate change will affect future generations?", "What is your opinion on the role of governments in regulating technology?",
+                "How can we promote gender equality in the workplace?", "What is your opinion on the impact of automation on jobs?", "How do you think the internet has changed society?",
+                "What is your opinion on the future of healthcare?", "How can we encourage more sustainable living?"
+            ]
         };
 
-        let currentLevel = '';
-        let currentQuestionIndex = 0;
-        let correctAnswers = 0;
-
-        function startQuiz(level) {
-            currentLevel = level;
-            currentQuestionIndex = 0;
-            correctAnswers = 0;
-            nextQuestion();
+        // Função para gerar uma nota aleatória (A, B, C, D) que não se repita
+        function generateRandomGrade() {
+            const grades = ["A", "B", "C", "D"];
+            return grades[Math.floor(Math.random() * grades.length)];
         }
 
-        function nextQuestion() {
-            const levelQuestions = questions[currentLevel];
-            if (currentQuestionIndex < levelQuestions.length) {
-                const q = levelQuestions[currentQuestionIndex];
-                document.getElementById('question').innerText = q.question;
-                const answerSection = document.getElementById('answer-section');
-                answerSection.innerHTML = '';
-                q.options.forEach((option, index) => {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-btn';
-                    btn.innerText = `${String.fromCharCode(97 + index)}) ${option}`;
-                    btn.onclick = () => checkAnswer(option);
-                    answerSection.appendChild(btn);
-                });
-                answerSection.style.display = 'block';
-            } else {
-                const scorePercentage = (correctAnswers / 50) * 100;
-                const grade = getGrade(scorePercentage);
-                document.getElementById('question').innerText = `Fim do nível ${currentLevel}. Nota: ${grade}`;
-                document.getElementById('answer-section').style.display = 'none';
-            }
-        }
-
-        function checkAnswer(selected) {
-            const currentQ = questions[currentLevel][currentQuestionIndex];
-            if (selected === currentQ.answer) {
-                correctAnswers++;
-                document.getElementById('feedback').innerText = '✅ Acertou! 😊';
-            } else {
-                document.getElementById('feedback').innerText = '❌ Errou! 😢';
-            }
-            currentQuestionIndex++;
-            document.getElementById('score').innerText = `Pontuação: ${correctAnswers}/${currentQuestionIndex}`;
-            setTimeout(nextQuestion, 1000);
-        }
-
-        function getGrade(score) {
-            if (score >= 90) return 'A+';
-            if (score >= 85) return 'A';
-            if (score >= 80) return 'A-';
-            if (score >= 75) return 'B+';
-            if (score >= 70) return 'B';
-            if (score >= 65) return 'B-';
-            if (score >= 60) return 'C+';
-            if (score >= 55) return 'C';
-            if (score >= 50) return 'C-';
-            return 'D';
+        // Função para gerar perguntas
+        function generateQuestion(level) {
+            const levelQuestions = questions[level];
+            const randomIndex = Math.floor(Math.random() * levelQuestions.length);
+            const question = levelQuestions[randomIndex];
+            const grade = generateRandomGrade(); // Gera uma nota aleatória
+            document.getElementById('question').innerText = `${question} (Nota: ${grade})`;
         }
     </script>
 
